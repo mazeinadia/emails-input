@@ -28,21 +28,28 @@ const generateSymbol = (type: SYMBOL) => {
   return type[positionInSequence];
 };
 
-const generateName = (maxLength = 20, ignoreDigits = false) => {
+export const generateName = (maxLength = 20, ignoreDigits = false) => {
   const length = generateRandomNumber(maxLength);
   let nextSymbol = SYMBOL.LETTERS;
   let name = '';
 
-  for(let i = 0; i < length; i += 1) {
+  for (let i = 0; i < length; i += 1) {
     const newSymbol = generateSymbol(nextSymbol);
     name = name + newSymbol;
+
     if (SYMBOL.CONSONANTS.indexOf(newSymbol) !== -1) {
       if (ignoreDigits) nextSymbol = SYMBOL.VOWELS;
       else nextSymbol = SYMBOL.VOWELS_NUMBER;
-    } else if (SYMBOL.VOWELS.indexOf(newSymbol) !== -1) {
+      continue;
+    }
+
+    if (SYMBOL.VOWELS.indexOf(newSymbol) !== -1) {
       if (ignoreDigits) nextSymbol = SYMBOL.CONSONANTS;
       else nextSymbol = SYMBOL.CONSONANTS_NUMBER;
-    } else if (SYMBOL.NUMBER.indexOf(newSymbol) !== -1) {
+      continue;
+    }
+    
+    if (SYMBOL.NUMBER.indexOf(newSymbol) !== -1) {
       nextSymbol = SYMBOL.ALL;
     }
   }
@@ -54,7 +61,7 @@ const generateDomain = () => {
   const levels = generateRandomNumber(3);
   let domain = '';
   for (let levelCounter = 0; levelCounter < levels; levelCounter += 1) {
-    domain = domain + generateName(10, true) + '.'
+    domain = domain + generateName(10, true) + '.';
   }
   return domain + 'com';
 };

@@ -15,7 +15,7 @@ Using `npm`
 npm install 
 ```
 
-### Add scripts
+### Add script
 
 ```html
 <script src=""></script>
@@ -30,11 +30,24 @@ npm install
 <script src="emails-input.js"></script> 
 <script> 
     var inputContainerNode = document.querySelector('#emails-input'); 
-    var emailsInput = EmailsInput(inputContainerNode, ...); 
+    var emailsInput = EmailsInput(inputContainerNode); 
 </script>
 ```
 
 ### Advanced
+
+emailInput = EmailsInput(container, name, options);
+
+Parameters:
+
+| parameter | required | type | description | example |
+|---|---|---|---|---|
+| container | + | HTMLElement | element to wrap Emails Input | document.querySelector('body') |
+| options | - |  |  |  |
+| options.value | - | string[] |  | ['john@gmail.com'] |
+| options.onChange | - | ({ id: number, value: string, valid: boolean }[]) => void | callback for change Emails Input value | (values) => { console.log(values) } |
+
+Returns HTMLElement - wrapper of component
 
 ### Browser supports
  - IE11+
@@ -43,7 +56,7 @@ npm install
  - FF latest
  - Safari latest
  
-## 💻 Devlopment
+## 💻 Development
 ### Setup
 Install all dependencies:
 

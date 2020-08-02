@@ -1,10 +1,15 @@
-import EmailsInputComponent, { IEmailsInputOptions } from './components/EmailsInput';
+import EmailsInputComponent, {
+  IEmailsInputOptions,
+} from './components/EmailsInput';
+import UniqueNamespaceGenerator from './services/namespaceGenerator';
 import './styles.pcss';
-import {loadFont} from "./services/fonts";
 
-let isFontsLoading = false;
+const namespaceGenerator = new UniqueNamespaceGenerator();
 
-export default function EmailsInput(containerEl: HTMLElement, options?: IEmailsInputOptions) {
+const EmailsInput = (
+  containerEl: HTMLElement,
+  options?: IEmailsInputOptions
+) => {
   if (typeof window !== 'object') {
     // todo check duck-type
     console.error(
@@ -13,29 +18,21 @@ export default function EmailsInput(containerEl: HTMLElement, options?: IEmailsI
     return null;
   }
 
-  function onDocumentReady(emailsInputEl: HTMLElement) {
-    containerEl.appendChild(emailsInputEl);
-
-    emailsInput.mount();
-    containerEl.parentElement?.addEventListener('DOMNodeRemoved', function (e) {
-      if (e.target === containerEl) {
-        emailsInput.unmount();
-      }
-    });
-    if (!isFontsLoading) loadFont();
-  }
-
-  const emailsInput = new EmailsInputComponent('jrgjbnjg', options || {});
+  const namespace = namespaceGenerator.next;
+  const emailsInput = new EmailsInputComponent(
+    namespace,
+    options || {}
+  );
   const emailsInputEl = emailsInput.element;
-  if (document.readyState === 'loading') {
-    document.onreadystatechange = function () {
-      if (document.readyState == "interactive") {
-        onDocumentReady(emailsInputEl);
-      }
+  containerEl.appendChild(emailsInputEl);
+  emailsInput.mount();
+  containerEl.parentElement?.addEventListener('DOMNodeRemoved', function (e) {
+    if (e.target === containerEl) {
+      emailsInput.unmount();
     }
-  } else {
-    onDocumentReady(emailsInputEl);
-  }
+  });
 
   return emailsInputEl;
-}
+};
+
+export default EmailsInput;

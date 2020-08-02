@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Emails Input Demo</title>
+    <title>Emails Input Demo. Empty input</title>
 </head>
 <body>
     <style>
@@ -14,12 +14,7 @@
     <script src="../dist/emails-input.js"></script>
     <script>
       var inputContainerNode = document.querySelector('#emails-input');
-      EmailsInput(inputContainerNode, {
-        value: [ "john@miro.com", "invalid.email", "mike@miro.com", "alexander@miro.com"],
-        onChange: function (values) {
-          console.log(values);
-        }
-      });
+      EmailsInput(inputContainerNode);
     </script>
 </body>
 </html>

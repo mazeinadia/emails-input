@@ -12,11 +12,12 @@ export default class Email extends BaseComponent {
       classList: ['email', valid ? 'email--valid' : 'email--invalid'],
       template:
         `<span class="email-value">${value}</span>` +
-        `<button type="button" class="delete-email-button" data-email-id="${id}"></button>`,
+        `<button type="button" class="delete-email-button" data-email-id="${id}" data-cy="delete-email"></button>`,
     });
 
     this.valid = valid;
   }
 
-  public static validate: (value: string) => boolean = (value) => validateEmail(value);
+  public static validate: (value: string) => boolean = (value) =>
+    validateEmail(value);
 }

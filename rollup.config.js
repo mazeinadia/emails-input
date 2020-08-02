@@ -8,7 +8,7 @@ export default {
   input: 'src/index.ts',
   output: {
     file: 'dist/emails-input.js',
-    format: 'cjs',
+    format: 'iife',
     name: 'EmailsInput',
     sourcemap: process.env.NODE_ENV === 'development',
   },

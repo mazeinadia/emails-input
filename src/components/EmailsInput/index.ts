@@ -44,14 +44,14 @@ export default class EmailsInputComponent extends BaseComponent {
       template:
         `<div class="content">` +
         `<h2 class="title">Share <b>Board name</b> with others</h2>` +
-        `<div class="emails-container" id="${namespace}${CONTAINER_SELECTOR_POSTFIX}">` +
-        `<textarea class="input" id="${namespace}${INPUT_SELECTOR_POSTFIX}" placeholder="add more people..."></textarea>` +
+        `<div class="emails-container" id="${namespace}${CONTAINER_SELECTOR_POSTFIX}" data-cy="input-container">` +
+        `<textarea class="input" id="${namespace}${INPUT_SELECTOR_POSTFIX}" placeholder="add more people..." data-cy="input"></textarea>` +
         `<div class="hidden-input-value" id="${namespace}${HIDDEN_INPUT_SELECTOR_POSTFIX}"></div> ` +
         `</div>` +
         `</div>` +
         `<div class="footer">` +
-        `<button type="button" class="button" id="${namespace}${ADD_EMAIL_SELECTOR_POSTFIX}">Add email</button>` +
-        `<button type="button" class="button" id="${namespace}${GET_COUNT_SELECTOR_POSTFIX}">Get emails count</button>` +
+        `<button type="button" class="button" id="${namespace}${ADD_EMAIL_SELECTOR_POSTFIX}" data-cy="add-email">Add email</button>` +
+        `<button type="button" class="button" id="${namespace}${GET_COUNT_SELECTOR_POSTFIX}" data-cy="get-valid">Get emails count</button>` +
         `</div>`,
     });
 
@@ -67,8 +67,12 @@ export default class EmailsInputComponent extends BaseComponent {
     this.getValidEmailsButton = this.element.querySelector(
       `#${this.namespace}${GET_COUNT_SELECTOR_POSTFIX}`
     );
-    this.inputElement = this.element.querySelector(`#${this.namespace}${INPUT_SELECTOR_POSTFIX}`);
-    this.hiddenInputElement = this.element.querySelector(`#${this.namespace}${HIDDEN_INPUT_SELECTOR_POSTFIX}`);
+    this.inputElement = this.element.querySelector(
+      `#${this.namespace}${INPUT_SELECTOR_POSTFIX}`
+    );
+    this.hiddenInputElement = this.element.querySelector(
+      `#${this.namespace}${HIDDEN_INPUT_SELECTOR_POSTFIX}`
+    );
     this.containerElement = this.element.querySelector(
       `#${this.namespace}${CONTAINER_SELECTOR_POSTFIX}`
     );
@@ -128,7 +132,7 @@ export default class EmailsInputComponent extends BaseComponent {
       this.values.push({
         id: this.nextEmailPrimaryId,
         value: trimmedValue,
-        valid: newEmail.valid
+        valid: newEmail.valid,
       });
 
       if (newEmail.valid) {
@@ -140,7 +144,7 @@ export default class EmailsInputComponent extends BaseComponent {
       const newEmailEl = newEmail.element;
       if (!this.inputElement || !this.containerElement) return;
       this.containerElement.insertBefore(newEmailEl, this.inputElement);
-      if (this.onChange && invokeOnChange) this.onChange(this.values)
+      if (this.onChange && invokeOnChange) this.onChange(this.values);
     }
     if (this.inputElement) this.inputElement.value = '';
     this.handleResetInputSize();
@@ -167,21 +171,21 @@ export default class EmailsInputComponent extends BaseComponent {
     const removedEmailId = parseInt(removedEmailIdAttribute, 10);
     if (isNaN(removedEmailId)) return;
 
-    this.values = this.values.filter(value => {
+    this.values = this.values.filter((value) => {
       if (value.id === removedEmailId) {
         // @ts-ignore
         this.containerElement?.removeChild(emailEl.parentElement);
         if (value.valid) this.validEmailCounter -= 1;
         return false;
       }
-      return true
+      return true;
     });
 
     if (this.onChange) this.onChange(this.values);
   };
 
   private addArray = (values: string[]) => {
-    values.forEach(value => this.addEmail(value, false));
+    values.forEach((value) => this.addEmail(value, false));
     if (this.onChange) this.onChange(this.values);
   };
 
@@ -217,15 +221,15 @@ export default class EmailsInputComponent extends BaseComponent {
 
     this.hiddenInputElement.innerText = this.inputElement.value;
 
-    const hiddenInputWidth  = this.hiddenInputElement.offsetWidth;
-    const hiddenInputHeight  = this.hiddenInputElement.offsetHeight;
+    const hiddenInputWidth = this.hiddenInputElement.offsetWidth;
+    const hiddenInputHeight = this.hiddenInputElement.offsetHeight;
 
     const inputWidth = this.inputElement.offsetWidth;
     const inputHeight = this.inputElement.offsetHeight;
 
     if (hiddenInputWidth <= 130 && inputWidth !== 130) {
       this.handleResetInputSize();
-      return
+      return;
     }
 
     if (inputWidth !== hiddenInputWidth) {
@@ -236,5 +240,5 @@ export default class EmailsInputComponent extends BaseComponent {
       this.inputElement.style.height = `${hiddenInputHeight}px`;
     }
     this.hiddenInputElement.innerText = '';
-  }
+  };
 }
