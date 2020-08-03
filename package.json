@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production rollup -c",
-    "dev": "npm-run-all --parallel dev:build dev:start",
-    "dev:build": "rollup -c --watch",
-    "dev:start": "http-server -o /demo",
+    "dev": "cross-env NODE_ENV=development rollup -c --watch",
+    "demo:start": "http-server dist -o /demo",
+    "demo:build": "rollup -c rollup.config.demo.js",
+    "demo:dev": "rollup -c rollup.config.demo.js --watch",
     "format": "prettier --write src/**/*.{ts,pcss}",
-    "test": "cypress open"
+    "test:int": "cypress open",
+    "test:unit": "npx jest"
   },
   "keywords": [],
   "author": "",
@@ -17,22 +19,26 @@
   "devDependencies": {
     "@babel/core": "^7.11.0",
     "@rollup/plugin-typescript": "^5.0.2",
-    "@types/mocha": "^8.0.1",
+    "@types/jest": "^26.0.8",
     "autoprefixer": "^9.8.6",
     "cross-env": "^7.0.2",
     "cssnano": "^4.1.10",
     "cypress": "^4.11.0",
     "eslint-plugin-cypress": "^2.11.1",
     "http-server": "^0.12.3",
-    "npm-run-all": "^4.1.5",
+    "jest": "^26.2.2",
+    "postcss-modules": "^3.2.0",
     "postcss-nested": "^4.2.3",
-    "postcss-selector-namespace": "^3.0.1",
     "postcss-url": "^8.0.0",
     "postcss-variables": "^1.1.1",
     "prettier": "^2.0.5",
     "rollup": "^2.23.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-postcss": "^3.1.3",
-    "typescript": "^3.9.7"
+    "rollup-plugin-postcss-modules": "^2.0.1",
+    "rollup-plugin-terser": "^6.1.0",
+    "ts-jest": "^26.1.4",
+    "typescript": "^3.9.7",
+    "typings-for-css-modules-loader": "^1.7.0"
   }
 }

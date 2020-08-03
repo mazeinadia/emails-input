@@ -1,4 +1,5 @@
 module.exports = {
+  writeDefinitions: true,
   plugins: {
     'postcss-url': { url: 'inline'},
     'cssnano': {

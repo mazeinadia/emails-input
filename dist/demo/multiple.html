@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Emails Input Demo.Multiple</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+    <div class="share-board-form-container">
+        <div class="share-board-form">
+            <div data-cy="container-1">
+                <div class="content">
+                    <h2 class="title">Share <b>Board name</b> with others</h2>
+                    <div id="emails-input-1" class="emails-input"></div>
+                </div>
+                <div class="footer">
+                    <button type="button" class="button" id="add-email-1" data-cy="add-email">Add email</button>
+                    <button type="button" class="button" id="get-valid-count-1" data-cy="get-valid">Get emails count</button>
+                </div>
+            </div>
+            <div data-cy="container-2">
+                <div class="content">
+                    <h2 class="title">Share <b>Second Board name</b> with others</h2>
+                    <div data-cy="container-2" id="emails-input-2" class="emails-input"></div>
+                </div>
+                <div class="footer">
+                    <button type="button" class="button" id="add-email-2" data-cy="add-email">Add email</button>
+                    <button type="button" class="button" id="get-valid-count-2" data-cy="get-valid">Get emails count</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../emails-input.js"></script>
+    <script src="./index.js"></script>
+    <script>
+      var inputContainerNode1 = document.querySelector('#emails-input-1');
+      var emailsInput1 = EmailsInput(inputContainerNode1);
+      var addEmailButton1 = document.querySelector('#add-email-1');
+      var getValidCountButton1 = document.querySelector('#get-valid-count-1');
+      initShareBordForm(emailsInput1, addEmailButton1, getValidCountButton1);
+
+      var inputContainerNode2 = document.querySelector('#emails-input-2');
+      var emailsInput2 = EmailsInput(inputContainerNode2);
+      var addEmailButton2 = document.querySelector('#add-email-2');
+      var getValidCountButton2 = document.querySelector('#get-valid-count-2');
+      initShareBordForm(emailsInput2, addEmailButton2, getValidCountButton2);
+    </script>
+</body>
+</html>

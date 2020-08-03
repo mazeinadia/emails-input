@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Emails Input Demo. Empty input</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+    <div class="share-board-form-container">
+        <div class="share-board-form" data-cy="container">
+            <div class="content">
+                <h2 class="title">Share <b>Board name</b> with others</h2>
+                <div id="emails-input" class="emails-input"></div>
+            </div>
+            <div class="footer">
+                <button type="button" class="button" id="add-email" data-cy="add-email">Add email</button>
+                <button type="button" class="button" id="get-valid-count" data-cy="get-valid">Get emails count</button>
+            </div>
+        </div>
+    </div>
+    <script src="../emails-input.js"></script>
+    <script src="./index.js"></script>
+    <script>
+      var inputContainerNode = document.querySelector('#emails-input');
+      var emailsInput = EmailsInput(inputContainerNode);
+
+      var addEmailButton = document.querySelector('#add-email');
+      var getValidCountButton = document.querySelector('#get-valid-count');
+
+      initShareBordForm(emailsInput, addEmailButton, getValidCountButton);
+    </script>
+</body>
+</html>

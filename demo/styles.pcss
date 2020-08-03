@@ -1,4 +1,29 @@
-.emails-input {
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+div,
+b,
+h2,
+button {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  line-height: 24px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.share-board-form-container {
+  width: 100%;
+}
+
+.share-board-form {
   box-sizing: border-box;
   max-width: 100%;
   max-height: 100%;
@@ -9,6 +34,7 @@
   color: $colors.primaryText;
   font-size: 14px;
   line-height: 24px;
+  margin: 32px auto;
 }
 
 .title {
@@ -27,24 +53,12 @@
   background-color: $colors.secondaryBg;
 }
 
-.footer {
-  padding: 24px 50px 16px;
+.emails-input {
+  height: $inputHeight;
 }
 
-.emails-container {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  width: 100%;
-  height: $inputHeight;
-  max-height: $inputHeight;
-  padding: 8px 7px;
-  overflow-y: auto;
-  background: $colors.primaryBg;
-  border: 1px solid $border;
-  border-radius: 4px;
-  cursor: text;
+.footer {
+  padding: 24px 50px 16px;
 }
 
 .button {
@@ -53,6 +67,7 @@
   color: $colors.accentText;
   padding: 8px 16px;
   transition: background-color 0.2s ease-in-out;
+  margin-bottom: 16px;
 
   &:hover {
     background-color: $colors.accentHoverBg;
@@ -60,22 +75,5 @@
 
   &:first-child {
     margin-right: 16px;
-    margin-bottom: 16px;
   }
-}
-
-.input {
-  width: 130px;
-  min-width: 130px;
-  height: 24px;
-  overflow: hidden;
-  line-height: 24px;
-}
-
-.hidden-input-value {
-  position: absolute;
-  max-width: calc(100% - 14px);
-  visibility: hidden;
-  z-index: -1;
-  word-wrap: break-word;
 }

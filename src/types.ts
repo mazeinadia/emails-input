@@ -1,3 +1,3 @@
-export interface ClickEvent extends Event {
+export interface ClickEvent extends MouseEvent {
   target: HTMLElement;
 }

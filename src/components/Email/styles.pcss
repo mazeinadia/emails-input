@@ -1,36 +1,35 @@
 .email {
+  display: flex;
   height: 24px;
   max-width: calc(100% - 14px);
   line-height: 24px;
-  margin-bottom: 4px;
-  display: flex;
-  margin-right: 8px;
-}
+  margin: 0 8px 4px 0!important;
 
-.email--valid {
-  background-color: $colors.emailValidBg;
-  border-radius: 100px;
-  padding-left: 10px;
-}
+  &.email--valid {
+    background-color: $colors.emailValidBg;
+    border-radius: 100px;
+    padding-left: 10px;
+  }
 
-.email--invalid {
-  border-bottom: 1px dashed $colors.errorBorder;
+  &.email--invalid {
+    border-bottom: 1px dashed $colors.errorBorder;
+
+    .delete-email-button {
+      padding-right: 0;
+      width: 16px;
+    }
+  }
+
+  .email-value {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
   .delete-email-button {
-    padding-right: 0;
-    width: 16px;
+    padding: 8px;
+    background: url('./remove.svg') no-repeat center;
+    width: 24px;
+    height: 24px;
   }
-}
-
-.email-value {
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.delete-email-button {
-  padding: 8px;
-  background: url('./remove.svg') no-repeat center;
-  width: 24px;
-  height: 24px;
 }

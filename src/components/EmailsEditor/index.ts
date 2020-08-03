@@ -1,7 +1,8 @@
 import BaseComponent from '../Base';
 import Email from '../Email';
-import { generateRandomEmail } from '../../services/emailService';
-import './styles.pcss';
+import IdGenerator from '../../services/idGenerator';
+import { ClickEvent } from '../../types';
+import styles from './styles.pcss';
 
 const ENTER_KEY = 'Enter';
 const COMMA_KEY = ',';
@@ -9,128 +10,110 @@ const COMMA_KEY = ',';
 const CONTAINER_SELECTOR_POSTFIX = '-container';
 const INPUT_SELECTOR_POSTFIX = '-input';
 const HIDDEN_INPUT_SELECTOR_POSTFIX = '-hidden-input';
-const ADD_EMAIL_SELECTOR_POSTFIX = '-add-email';
-const GET_COUNT_SELECTOR_POSTFIX = '-get-count';
 
-export interface IEmailsInputOptions {
+const HIDDEN_INPUT_MIN_WIDTH = 130;
+const HIDDEN_INPUT_MIN_HEIGHT = 24;
+
+export interface IEmailsEditorOptions {
   value?: string[];
   onChange?: (value: IValue[]) => void;
 }
 
-interface IValue {
+export interface IValue {
   id: number;
   value: string;
   valid: boolean;
 }
 
-export default class EmailsInputComponent extends BaseComponent {
+export default class EmailsEditor extends BaseComponent {
   private validEmailCounter = 0;
-  private nextEmailPrimaryId = 0;
+  private nextEmailPrimaryIdGenerator: IdGenerator;
 
   private readonly namespace: string;
   private readonly initialValues?: string[];
   private readonly onChange?: (values: IValue[]) => void;
   private values: IValue[] = [];
 
-  private addEmailButton: HTMLButtonElement | null;
-  private getValidEmailsButton: HTMLButtonElement | null;
   private inputElement: HTMLTextAreaElement | null;
   private hiddenInputElement: HTMLDivElement | null;
   private containerElement: HTMLDivElement | null;
 
-  constructor(namespace: string, options: IEmailsInputOptions) {
+  constructor(
+    container: HTMLElement,
+    namespace: string,
+    options: IEmailsEditorOptions
+  ) {
     super({
-      classList: ['emails-input'],
+      container,
+      className: styles["emails-input"],
       template:
-        `<div class="content">` +
-        `<h2 class="title">Share <b>Board name</b> with others</h2>` +
-        `<div class="emails-container" id="${namespace}${CONTAINER_SELECTOR_POSTFIX}" data-cy="input-container">` +
-        `<textarea class="input" id="${namespace}${INPUT_SELECTOR_POSTFIX}" placeholder="add more people..." data-cy="input"></textarea>` +
-        `<div class="hidden-input-value" id="${namespace}${HIDDEN_INPUT_SELECTOR_POSTFIX}"></div> ` +
-        `</div>` +
-        `</div>` +
-        `<div class="footer">` +
-        `<button type="button" class="button" id="${namespace}${ADD_EMAIL_SELECTOR_POSTFIX}" data-cy="add-email">Add email</button>` +
-        `<button type="button" class="button" id="${namespace}${GET_COUNT_SELECTOR_POSTFIX}" data-cy="get-valid">Get emails count</button>` +
+        `<div class="${styles['input-container']}" id="${namespace}${CONTAINER_SELECTOR_POSTFIX}" data-cy="input-container">` +
+        `<textarea class="${styles.input}" id="${namespace}${INPUT_SELECTOR_POSTFIX}" placeholder="add more people..." data-cy="input"></textarea>` +
+        `<div class="${styles['hidden-input']}" id="${namespace}${HIDDEN_INPUT_SELECTOR_POSTFIX}"></div>` +
         `</div>`,
     });
 
     this.namespace = namespace;
     this.initialValues = options.value;
     this.onChange = options.onChange;
+    this.nextEmailPrimaryIdGenerator = new IdGenerator();
+    this.onMount(namespace);
   }
 
-  public onMount = () => {
-    this.addEmailButton = this.element.querySelector(
-      `#${this.namespace}${ADD_EMAIL_SELECTOR_POSTFIX}`
-    );
-    this.getValidEmailsButton = this.element.querySelector(
-      `#${this.namespace}${GET_COUNT_SELECTOR_POSTFIX}`
+  public get validEmailsCount() {
+    return this.validEmailCounter;
+  }
+
+  private onMount = (namespace: string) => {
+    console.log(
+      'mount',
+      this.element.querySelector(`#${namespace}${CONTAINER_SELECTOR_POSTFIX}`)
     );
     this.inputElement = this.element.querySelector(
-      `#${this.namespace}${INPUT_SELECTOR_POSTFIX}`
+      `#${namespace}${INPUT_SELECTOR_POSTFIX}`
     );
     this.hiddenInputElement = this.element.querySelector(
-      `#${this.namespace}${HIDDEN_INPUT_SELECTOR_POSTFIX}`
+      `#${namespace}${HIDDEN_INPUT_SELECTOR_POSTFIX}`
     );
     this.containerElement = this.element.querySelector(
-      `#${this.namespace}${CONTAINER_SELECTOR_POSTFIX}`
+      `#${namespace}${CONTAINER_SELECTOR_POSTFIX}`
     );
 
     if (this.initialValues) {
       this.addArray(this.initialValues);
     }
 
-    this.addEmailButton?.addEventListener('click', this.addRandomEmail);
-    this.getValidEmailsButton?.addEventListener(
-      'click',
-      this.alertValidEmailCount
-    );
-
     this.containerElement?.addEventListener(
       'click',
+      // @ts-ignore
       this.handleEmailsContainerClick
     );
-
     this.inputElement?.addEventListener('paste', this.handlePaste);
     this.inputElement?.addEventListener('keydown', this.handleKeyDown);
     this.inputElement?.addEventListener('focusout', this.addInputValue);
     this.inputElement?.addEventListener('input', this.handleChangeInput);
   };
 
-  public onUnmount = () => {
-    this.addEmailButton?.removeEventListener('click', this.addRandomEmail);
-    this.getValidEmailsButton?.removeEventListener(
-      'click',
-      this.alertValidEmailCount
-    );
-
+  protected onUnmount = () => {
     this.containerElement?.removeEventListener(
       'click',
+      // @ts-ignore
       this.handleEmailsContainerClick
     );
-
     this.inputElement?.removeEventListener('paste', this.handlePaste);
     this.inputElement?.removeEventListener('keydown', this.handleKeyDown);
     this.inputElement?.removeEventListener('focusout', this.addInputValue);
     this.inputElement?.removeEventListener('input', this.handleChangeInput);
   };
 
-  alertValidEmailCount = () => {
-    alert(`Valid emails count: ${this.validEmailCounter}`);
-  };
-
-  addRandomEmail = () => {
-    this.addEmail(generateRandomEmail());
-  };
-
-  addEmail = (value?: string, invokeOnChange = true) => {
+  public addEmail = (value?: string, invokeOnChange = true) => {
     if (!value) return;
     const trimmedValue = value.trim();
     if (trimmedValue) {
-      const newEmail = new Email(trimmedValue, this.nextEmailPrimaryId);
+      const id = this.nextEmailPrimaryIdGenerator.next;
+      const newEmail = new Email(trimmedValue, id);
       this.values.push({
-        id: this.nextEmailPrimaryId,
+        id,
         value: trimmedValue,
         valid: newEmail.valid,
       });
@@ -138,8 +121,6 @@ export default class EmailsInputComponent extends BaseComponent {
       if (newEmail.valid) {
         this.validEmailCounter += 1;
       }
-
-      this.nextEmailPrimaryId += 1;
 
       const newEmailEl = newEmail.element;
       if (!this.inputElement || !this.containerElement) return;
@@ -150,31 +131,33 @@ export default class EmailsInputComponent extends BaseComponent {
     this.handleResetInputSize();
   };
 
-  private handleEmailsContainerClick = (event: MouseEvent) => {
+  private handleEmailsContainerClick = (event: ClickEvent) => {
     const { target } = event;
-    // @ts-ignore
-    if (target.getAttribute('class') === 'delete-email-button') {
-      // @ts-ignore
-      this.removeEmail(target);
+
+    if (target.getAttribute('data-email-id')) {
+      this.handelRemoveEmailClick(target);
       return;
     }
-    // @ts-ignore
-    if (target.getAttribute('id') === `${this.namespace}${CONTAINER_SELECTOR_POSTFIX}`) {
+    if (
+      target.getAttribute('id') ===
+      `${this.namespace}${CONTAINER_SELECTOR_POSTFIX}`
+    ) {
       this.inputElement?.focus();
     }
   };
 
-  private removeEmail = (emailEl: HTMLElement) => {
-    const removedEmailIdAttribute = emailEl.getAttribute('data-email-id');
-    if (!removedEmailIdAttribute) return;
-
-    const removedEmailId = parseInt(removedEmailIdAttribute, 10);
-    if (isNaN(removedEmailId)) return;
+  public removeEmail = (removedEmailId: number) => {
+    if (!this.containerElement) return;
+    const removedEmailDeleteButton = this.containerElement.querySelector(
+      `[data-email-id="${removedEmailId}"]`
+    );
+    if (!removedEmailDeleteButton) return;
 
     this.values = this.values.filter((value) => {
       if (value.id === removedEmailId) {
-        // @ts-ignore
-        this.containerElement?.removeChild(emailEl.parentElement);
+        const emailElement = removedEmailDeleteButton.parentElement;
+        if (!emailElement) return false;
+        this.containerElement?.removeChild(emailElement);
         if (value.valid) this.validEmailCounter -= 1;
         return false;
       }
@@ -182,6 +165,18 @@ export default class EmailsInputComponent extends BaseComponent {
     });
 
     if (this.onChange) this.onChange(this.values);
+  };
+
+  private handelRemoveEmailClick = (deleteEmailButton: HTMLElement) => {
+    const removedEmailIdAttribute = deleteEmailButton.getAttribute(
+      'data-email-id'
+    );
+    if (!removedEmailIdAttribute) return;
+
+    const removedEmailId = parseInt(removedEmailIdAttribute, 10);
+    if (isNaN(removedEmailId)) return;
+
+    this.removeEmail(removedEmailId);
   };
 
   private addArray = (values: string[]) => {
@@ -210,13 +205,13 @@ export default class EmailsInputComponent extends BaseComponent {
     }
   };
 
-  handleResetInputSize = () => {
+  private handleResetInputSize = () => {
     if (!this.inputElement) return;
-    this.inputElement.style.width = '130px';
-    this.inputElement.style.height = '24px';
+    this.inputElement.style.width = `${HIDDEN_INPUT_MIN_WIDTH}px`;
+    this.inputElement.style.height = `${HIDDEN_INPUT_MIN_HEIGHT}px`;
   };
 
-  handleChangeInput = () => {
+  private handleChangeInput = () => {
     if (!this.inputElement || !this.hiddenInputElement) return;
 
     this.hiddenInputElement.innerText = this.inputElement.value;
@@ -227,7 +222,10 @@ export default class EmailsInputComponent extends BaseComponent {
     const inputWidth = this.inputElement.offsetWidth;
     const inputHeight = this.inputElement.offsetHeight;
 
-    if (hiddenInputWidth <= 130 && inputWidth !== 130) {
+    if (
+      hiddenInputWidth <= HIDDEN_INPUT_MIN_WIDTH &&
+      inputWidth !== HIDDEN_INPUT_MIN_WIDTH
+    ) {
       this.handleResetInputSize();
       return;
     }

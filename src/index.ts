@@ -1,14 +1,11 @@
-import EmailsInputComponent, {
-  IEmailsInputOptions,
-} from './components/EmailsInput';
-import UniqueNamespaceGenerator from './services/namespaceGenerator';
-import './styles.pcss';
+import EmailsEditor, { IEmailsEditorOptions } from './components/EmailsEditor';
+import IdGenerator from './services/idGenerator';
 
-const namespaceGenerator = new UniqueNamespaceGenerator();
+const idGenerator = new IdGenerator();
 
 const EmailsInput = (
   containerEl: HTMLElement,
-  options?: IEmailsInputOptions
+  options?: IEmailsEditorOptions
 ) => {
   if (typeof window !== 'object') {
     // todo check duck-type
@@ -18,21 +15,10 @@ const EmailsInput = (
     return null;
   }
 
-  const namespace = namespaceGenerator.next;
-  const emailsInput = new EmailsInputComponent(
-    namespace,
-    options || {}
-  );
-  const emailsInputEl = emailsInput.element;
-  containerEl.appendChild(emailsInputEl);
-  emailsInput.mount();
-  containerEl.parentElement?.addEventListener('DOMNodeRemoved', function (e) {
-    if (e.target === containerEl) {
-      emailsInput.unmount();
-    }
-  });
+  const namespace = `emails-input-q3nnHuTv21${idGenerator.next}`;
+  const emailsInput = new EmailsEditor(containerEl, namespace, options || {});
 
-  return emailsInputEl;
+  return emailsInput;
 };
 
 export default EmailsInput;

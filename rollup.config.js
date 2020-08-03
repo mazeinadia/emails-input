@@ -1,7 +1,6 @@
-// import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
-import postcss from 'rollup-plugin-postcss';
-
+import postcss from 'rollup-plugin-postcss-modules'
+import { terser } from 'rollup-plugin-terser';
 import typescript from '@rollup/plugin-typescript';
 
 export default {
@@ -14,10 +13,9 @@ export default {
   },
   include: 'src',
   plugins: [
-    postcss({}),
-    typescript({ lib: ['es5', 'es6', 'dom'], target: 'es5' }),
-    // commonjs(),
+    postcss({ writeDefinitions: true, }),
+    typescript({ tsconfig: "tsconfig.json" }),
     babel(),
-    // uglify()
+    terser(),
   ]
 };

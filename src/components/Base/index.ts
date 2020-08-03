@@ -1,30 +1,35 @@
 interface IBaseComponentProps {
+  container?: HTMLElement;
   tagName?: string;
-  classList?: string[];
+  className?: string;
   template: string;
 }
 
 export default class BaseComponent {
-  public element: HTMLElement;
+  private readonly rootElement: HTMLElement;
 
   public constructor(props: IBaseComponentProps) {
-    const { tagName = 'div', classList, template } = props;
-    this.element = document.createElement(tagName);
-    this.element.innerHTML = template;
-    if (classList) {
-      this.element.setAttribute('class', classList.join(' '));
+    const { container, tagName = 'div', className, template } = props;
+    this.rootElement = document.createElement(tagName);
+    this.rootElement.innerHTML = template;
+    if (className) {
+      this.rootElement.setAttribute('class', className);
+    }
+
+    if (container) {
+      container.appendChild(this.rootElement);
+
+      container.parentElement?.addEventListener('DOMNodeRemoved', (e) => {
+        if (e.target === container) {
+          this.onUnmount();
+        }
+      });
     }
   }
 
-  protected onMount = () => {};
+  public get element() {
+    return this.rootElement;
+  }
 
   protected onUnmount = () => {};
-
-  public mount = () => {
-    this.onMount();
-  };
-
-  public unmount = () => {
-    this.onUnmount();
-  };
 }

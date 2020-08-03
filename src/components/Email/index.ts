@@ -1,6 +1,6 @@
 import BaseComponent from '../Base';
-import { validateEmail } from '../../services/emailService';
-import './styles.pcss';
+import { validateEmail } from '../../services/emailValidator';
+import styles from './styles.pcss';
 
 export default class Email extends BaseComponent {
   public readonly valid: boolean;
@@ -9,10 +9,12 @@ export default class Email extends BaseComponent {
     const valid = Email.validate(value);
 
     super({
-      classList: ['email', valid ? 'email--valid' : 'email--invalid'],
+      className: `${styles.email} ${
+        valid ? styles["email--valid"] : styles["email--invalid"]
+      }`,
       template:
-        `<span class="email-value">${value}</span>` +
-        `<button type="button" class="delete-email-button" data-email-id="${id}" data-cy="delete-email"></button>`,
+        `<span class="${styles['email-value']}">${value}</span>` +
+        `<button type="button" class="${styles['delete-email-button']}" data-email-id="${id}" data-cy="delete-email"></button>`,
     });
 
     this.valid = valid;
