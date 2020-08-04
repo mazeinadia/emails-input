@@ -179,7 +179,7 @@ export default class EmailsEditor extends BaseComponent {
     if (!removedEmailIdAttribute) return;
 
     const removedEmailId = parseInt(removedEmailIdAttribute, 10);
-    if (Number.isNaN(removedEmailId)) return;
+    if (isNaN(removedEmailId)) return;
 
     this.removeEmail(removedEmailId);
   };
