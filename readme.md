@@ -85,3 +85,7 @@ npm run test:unit
 ```
 
 ### [Design in Figma](https://www.figma.com/file/CWdAs3rN4d2gZpnoN7ZPvj/Share-test)
+
+### TO DO:
+ - review unmount in components
+ - create package in github
