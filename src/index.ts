@@ -15,9 +15,8 @@ const EmailsInput = (
   }
 
   const namespace = `emails-input-q3nnHuTv21${idGenerator.next}`;
-  const emailsInput = new EmailsEditor(containerEl, namespace, options || {});
 
-  return emailsInput;
+  return new EmailsEditor(containerEl, namespace, options || {});
 };
 
 export default EmailsInput;

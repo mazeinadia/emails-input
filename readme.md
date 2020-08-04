@@ -8,17 +8,10 @@ Source code in [demo folder]()
 ---
 ## ⚙ Setup
 
-### Install
-Using `npm`
-
-```bash
-npm install 
-```
-
 ### Add script
 
 ```html
-<script src=""></script>
+<script src="emails-input.js"></script>
 ```
 
 ## ✉️ Usage
@@ -86,7 +79,7 @@ and run test with command:
 npm run test:int
 ```
 
-For unit tests you need ro run:
+For unit tests you need to npx installed, to run test:
 ```bash
 npm run test:unit
 ```

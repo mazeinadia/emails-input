@@ -13,12 +13,15 @@ const VALID_EMAILS = [
   'email@example.museum',
   'email@example.co.jp',
   'firstname-lastname@example.com',
+  'firstname-lastname1561656@example.com',
 ];
 
 const INVALID_EMAILS = [
   'plainaddress',
   '#@%^%#$@#$@#.com',
   '@example.com',
+  'abc.def@mail.c',
+  'abc.def@mail#archive.com',
   'Joe Smith <email@example.com>',
   'email.example.com',
   'email@example@example.com',
@@ -35,7 +38,7 @@ const INVALID_EMAILS = [
 ];
 
 describe('email validation', () => {
-  it(`returns "valid"(true) for valid email `, () => {
+  it('returns "valid"(true) for valid email ', () => {
     VALID_EMAILS.forEach((email) => {
       expect(validateEmail(email)).toBe(true);
     });

@@ -10,7 +10,7 @@ export default class Email extends BaseComponent {
 
     super({
       className: `${styles.email} ${
-        valid ? styles["email--valid"] : styles["email--invalid"]
+        valid ? styles['email--valid'] : styles['email--invalid']
       }`,
       template:
         `<span class="${styles['email-value']}">${value}</span>` +

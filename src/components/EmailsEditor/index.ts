@@ -26,15 +26,21 @@ export interface IValue {
 
 export default class EmailsEditor extends BaseComponent {
   private validEmailCounter = 0;
+
   private nextEmailPrimaryIdGenerator: IdGenerator;
 
   private readonly namespace: string;
+
   private readonly initialValues?: string[];
+
   private readonly onChange?: (values: IValue[]) => void;
+
   private values: IValue[] = [];
 
   private inputElement: HTMLTextAreaElement | null;
+
   private hiddenInputElement: HTMLDivElement | null;
+
   private containerElement: HTMLDivElement | null;
 
   constructor(
@@ -44,12 +50,12 @@ export default class EmailsEditor extends BaseComponent {
   ) {
     super({
       container,
-      className: styles["emails-input"],
+      className: styles['emails-input'],
       template:
         `<div class="${styles['input-container']}" id="${namespace}${CONTAINER_SELECTOR_POSTFIX}" data-cy="input-container">` +
         `<textarea class="${styles.input}" id="${namespace}${INPUT_SELECTOR_POSTFIX}" placeholder="add more people..." data-cy="input"></textarea>` +
         `<div class="${styles['hidden-input']}" id="${namespace}${HIDDEN_INPUT_SELECTOR_POSTFIX}"></div>` +
-        `</div>`,
+        '</div>',
     });
 
     this.namespace = namespace;
@@ -173,7 +179,7 @@ export default class EmailsEditor extends BaseComponent {
     if (!removedEmailIdAttribute) return;
 
     const removedEmailId = parseInt(removedEmailIdAttribute, 10);
-    if (isNaN(removedEmailId)) return;
+    if (Number.isNaN(removedEmailId)) return;
 
     this.removeEmail(removedEmailId);
   };
@@ -215,8 +221,7 @@ export default class EmailsEditor extends BaseComponent {
 
     this.hiddenInputElement.innerText = this.inputElement.value;
 
-    const hiddenInputWidth =
-      this.hiddenInputElement.offsetWidth + 10; // to prevent text shift
+    const hiddenInputWidth = this.hiddenInputElement.offsetWidth + 10; // to prevent text shift
     const hiddenInputHeight = this.hiddenInputElement.offsetHeight;
 
     const inputWidth = this.inputElement.offsetWidth;

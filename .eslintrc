@@ -1,11 +1,14 @@
 {
-  "plugins": ["prettier", "@typescript-eslint", "cypress"],
-  "extends": ["airbnb-typescript", "prettier"],
+  "plugins": ["prettier", "@typescript-eslint", "cypress", "import"],
+  "extends": ["airbnb-typescript/base", "plugin:prettier/recommended"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "./tsconfig.json"
   },
   "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts"]
+    },
     "import/resolver": {
       "typescript": {
         "alwaysTryTypes": true
@@ -13,6 +16,8 @@
     }
   },
   "rules": {
+    "import/no-unresolved": "error",
+    "prettier/prettier": "error",
     "object-curly-spacing": ["warn", "always"],
     "no-unused-vars": [
       "warn",
@@ -52,6 +57,9 @@
         ]
       }
     ],
+    "import/extensions": ["error", "ignorePackages", {
+      "ts": "never"
+    }],
     "import/prefer-default-export": "off"
   }
 }
