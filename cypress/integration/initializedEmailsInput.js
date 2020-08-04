@@ -19,13 +19,15 @@ describe('Initialized Emails Input', () => {
   });
 
   it('delete initial emails from Emails Input and invoke callback', () => {
-    const stub = cy.stub();
-    cy.on ('window:alert', stub);
+    cy.window().then((win) => {
+      const spy = cy.spy(win.console, 'log').as('consoleLog');
+      const withRestValue = spy.withArgs('Rest values: 3').as('consoleLogWithRestValue');
 
-    cy.get('[data-cy=container]').find('[data-email-id=1]').click()
-      .then(() => {
-        expect(stub.getCall(0)).to.be.calledWith('Rest values: 3')
-      });
+      cy.get('[data-cy=container]').find('[data-email-id=1]').click()
+        .then(() => {
+          expect(withRestValue).to.be.called;
+        });
+    });
   });
 });
 

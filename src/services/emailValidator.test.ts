@@ -3,9 +3,7 @@ import { validateEmail } from './emailValidator';
 const VALID_EMAILS = [
   'joesmith@example.com',
   'joesmith.nospamplease@nospam.example.com',
-  'email@example.com',
   'firstname.lastname@example.com',
-  'email@subdomain.example.com',
   'firstname+lastname@example.com',
   '"email"@example.com',
   '1234567890@example.com',

@@ -25,7 +25,7 @@
       var emailsInput = EmailsInput(inputContainerNode, {
         value: [ "john@miro.com", "invalid.email", "mike@miro.com", "alexander@miro.com"],
         onChange: function (values) {
-          alert(`Rest values: ${values.length}`);
+          console.log(`Rest values: ${values.length}`);
         }
       });
 
