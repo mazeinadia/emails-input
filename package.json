@@ -1,7 +1,7 @@
 {
   "name": "emails-input",
   "version": "1.0.0",
-  "description": "",
+  "description": "JavaScript Emails Input component with validation",
   "main": "index.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production rollup -c",

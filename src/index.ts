@@ -7,10 +7,9 @@ const EmailsInput = (
   containerEl: HTMLElement,
   options?: IEmailsEditorOptions
 ) => {
-  if (typeof window !== 'object') {
-    // todo check duck-type
+  if (!containerEl.appendChild || !containerEl.addEventListener) {
     console.error(
-      'Emails Input available only in browser with specified window object'
+      'Container element must be "HTMLElement" and have "appendChild" and "addEventListener" method'
     );
     return null;
   }

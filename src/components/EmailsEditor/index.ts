@@ -1,7 +1,6 @@
 import BaseComponent from '../Base';
 import Email from '../Email';
 import IdGenerator from '../../services/idGenerator';
-import { ClickEvent } from '../../types';
 import styles from './styles.pcss';
 
 const ENTER_KEY = 'Enter';
@@ -57,7 +56,11 @@ export default class EmailsEditor extends BaseComponent {
     this.initialValues = options.value;
     this.onChange = options.onChange;
     this.nextEmailPrimaryIdGenerator = new IdGenerator();
+
     this.onMount(namespace);
+    container.addEventListener('DOMNodeRemovedFromDocument', () => {
+      this.onUnmount();
+    });
   }
 
   public get validEmailsCount() {
@@ -65,10 +68,6 @@ export default class EmailsEditor extends BaseComponent {
   }
 
   private onMount = (namespace: string) => {
-    console.log(
-      'mount',
-      this.element.querySelector(`#${namespace}${CONTAINER_SELECTOR_POSTFIX}`)
-    );
     this.inputElement = this.element.querySelector(
       `#${namespace}${INPUT_SELECTOR_POSTFIX}`
     );
@@ -85,7 +84,6 @@ export default class EmailsEditor extends BaseComponent {
 
     this.containerElement?.addEventListener(
       'click',
-      // @ts-ignore
       this.handleEmailsContainerClick
     );
     this.inputElement?.addEventListener('paste', this.handlePaste);
@@ -97,7 +95,6 @@ export default class EmailsEditor extends BaseComponent {
   protected onUnmount = () => {
     this.containerElement?.removeEventListener(
       'click',
-      // @ts-ignore
       this.handleEmailsContainerClick
     );
     this.inputElement?.removeEventListener('paste', this.handlePaste);
@@ -131,8 +128,10 @@ export default class EmailsEditor extends BaseComponent {
     this.handleResetInputSize();
   };
 
-  private handleEmailsContainerClick = (event: ClickEvent) => {
+  private handleEmailsContainerClick = (event: MouseEvent) => {
     const { target } = event;
+
+    if (!(target instanceof HTMLElement)) return;
 
     if (target.getAttribute('data-email-id')) {
       this.handelRemoveEmailClick(target);
@@ -216,17 +215,15 @@ export default class EmailsEditor extends BaseComponent {
 
     this.hiddenInputElement.innerText = this.inputElement.value;
 
-    const hiddenInputWidth = this.hiddenInputElement.offsetWidth;
+    const hiddenInputWidth =
+      this.hiddenInputElement.offsetWidth + 10; // to prevent text shift
     const hiddenInputHeight = this.hiddenInputElement.offsetHeight;
 
     const inputWidth = this.inputElement.offsetWidth;
     const inputHeight = this.inputElement.offsetHeight;
 
-    if (
-      hiddenInputWidth <= HIDDEN_INPUT_MIN_WIDTH &&
-      inputWidth !== HIDDEN_INPUT_MIN_WIDTH
-    ) {
-      this.handleResetInputSize();
+    if (hiddenInputWidth <= HIDDEN_INPUT_MIN_WIDTH) {
+      if (inputWidth !== HIDDEN_INPUT_MIN_WIDTH) this.handleResetInputSize();
       return;
     }
 

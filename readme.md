@@ -36,7 +36,7 @@ npm install
 
 ### Advanced
 
-emailInput = EmailsInput(container, name, options);
+emailInput = EmailsInput(container, options);
 
 Parameters:
 
@@ -47,7 +47,12 @@ Parameters:
 | options.value | - | string[] |  | ['john@gmail.com'] |
 | options.onChange | - | ({ id: number, value: string, valid: boolean }[]) => void | callback for change Emails Input value | (values) => { console.log(values) } |
 
-Returns HTMLElement - wrapper of component
+Return value structure:
+| name | type | description |
+|---|---|---|
+| element | HTMLElement | EmailsInput root HTML-element |
+| validEmailsCount | number | count of valid emails in EmailsInput |
+| addEmail | (value: string) => void | method for adding new value in EmailsInput |
 
 ### Browser supports
  - IE11+
@@ -67,17 +72,23 @@ Run rollup and dev server in watch mode:
 
 ```bash
 npm run dev
+npm run demo:start
 ```
-This will run local-server, build to dist directory and automatically refresh page on any changes (it loads content from demo folder).
+This will run local dev-server, build to dist directory and automatically open demo page.
  
 ### Testing
 For integration tests you need to run dev server:
  ```bash
-npm run dev
+npm run demo:start
 ```
 and run test with command:
 ```bash
-npm run test
+npm run test:int
+```
+
+For unit tests you need ro run:
+```bash
+npm run test:unit
 ```
 
 ### [Design in Figma](https://www.figma.com/file/CWdAs3rN4d2gZpnoN7ZPvj/Share-test)

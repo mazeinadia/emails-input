@@ -18,12 +18,6 @@ export default class BaseComponent {
 
     if (container) {
       container.appendChild(this.rootElement);
-
-      container.parentElement?.addEventListener('DOMNodeRemoved', (e) => {
-        if (e.target === container) {
-          this.onUnmount();
-        }
-      });
     }
   }
 
